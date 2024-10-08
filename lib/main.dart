@@ -16,59 +16,55 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<void>(
-        future: Future.delayed(const Duration(seconds: 2)), // Simulate delay
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const MaterialApp(
-              debugShowCheckedModeBanner: false,
-              home: Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ),
+      future: Future.delayed(const Duration(seconds: 2)),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
               ),
-            );
-          } else if (snapshot.hasError) {
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              home: Scaffold(
-                body: Center(
-                  child: SelectableText(snapshot.error.toString()),
-                ),
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: Scaffold(
+              body: Center(
+                child: SelectableText(snapshot.error.toString()),
               ),
-            );
-          }
-          return MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (_) {
-                return ThemeProvider();
-              }),
-              ChangeNotifierProvider(create: (_) {
-                return ProductsProvider();
-              }),
-            ],
-            child: Consumer<ThemeProvider>(
-                builder: (context, themeProvider, child) {
+            ),
+          );
+        }
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => ThemeProvider()),
+            ChangeNotifierProvider(create: (_) => ProductsProvider()),
+          ],
+          child: Consumer<ThemeProvider>(
+            builder: (context, themeProvider, child) {
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
                 title: 'Shop Smart ADMIN EN',
                 theme: Styles.themeData(
-                    isDarkTheme: themeProvider.getIsDarkTheme,
-                    context: context),
+                  isDarkTheme: themeProvider.getIsDarkTheme,
+                  context: context,
+                ),
                 home: const DashboardScreen(),
                 routes: {
-                  OrdersScreenFree.routeName: (context) =>
-                      const OrdersScreenFree(),
+                  OrdersScreenFree.routeName: (context) => const OrdersScreenFree(),
                   SearchScreen.routeName: (context) => const SearchScreen(),
-                  EditOrUploadProductScreen.routeName: (context) =>
-                      const EditOrUploadProductScreen(),
+                  EditOrUploadProductScreen.routeName: (context) => const EditOrUploadProductScreen(),
                 },
               );
-            }),
-          );
-        });
+            },
+          ),
+        );
+      },
+    );
   }
 }
