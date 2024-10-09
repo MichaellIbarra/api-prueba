@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/consts/theme_data.dart';
+import 'package:myapp/providers/theme_provider.dart';
+import 'package:myapp/root_screen.dart';
 import 'package:provider/provider.dart';
-
-import 'consts/theme_data.dart';
-import 'providers/products_provider.dart';
-import 'providers/theme_provider.dart';
-import 'screens/dashboard_screen.dart';
-import 'screens/edit_upload_product_form.dart';
-import 'screens/inner_screen/orders/orders_screen.dart';
-import 'screens/search_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,55 +11,25 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-      future: Future.delayed(const Duration(seconds: 2)),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          );
-        } else if (snapshot.hasError) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) {
+          return ThemeProvider();
+        })
+      ],
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: Scaffold(
-              body: Center(
-                child: SelectableText(snapshot.error.toString()),
-              ),
-            ),
+            title: 'La Chancha',
+            theme: Styles.themeData(isDarkTheme: themeProvider.getIsDarkTheme, context: context),
+            home: const RootScreen(),
           );
         }
-        return MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (_) => ThemeProvider()),
-            ChangeNotifierProvider(create: (_) => ProductsProvider()),
-          ],
-          child: Consumer<ThemeProvider>(
-            builder: (context, themeProvider, child) {
-              return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                title: 'Shop Smart ADMIN EN',
-                theme: Styles.themeData(
-                  isDarkTheme: themeProvider.getIsDarkTheme,
-                  context: context,
-                ),
-                home: const DashboardScreen(),
-                routes: {
-                  OrdersScreenFree.routeName: (context) => const OrdersScreenFree(),
-                  SearchScreen.routeName: (context) => const SearchScreen(),
-                  EditOrUploadProductScreen.routeName: (context) => const EditOrUploadProductScreen(),
-                },
-              );
-            },
-          ),
-        );
-      },
+      ),
     );
   }
 }

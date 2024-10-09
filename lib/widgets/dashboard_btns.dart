@@ -29,7 +29,7 @@ class DashboardButtonsWidget extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              SubtitleTextWidget(label: text),
+              SubtitleText(label: text),
             ],
           ),
         ),

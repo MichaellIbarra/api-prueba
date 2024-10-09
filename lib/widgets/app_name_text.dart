@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/widgets/title_text.dart';
 import 'package:shimmer/shimmer.dart';
 
-import 'title_text.dart';
+class AppNameText extends StatelessWidget {
+  const AppNameText({super.key, this.fontSize = 20});
 
-class AppNameTextWidget extends StatelessWidget {
-  const AppNameTextWidget({super.key, this.fontSize = 30});
   final double fontSize;
+
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      period: const Duration(seconds: 22),
-      baseColor: Colors.purple,
-      highlightColor: Colors.red,
-      child: TitlesTextWidget(
-        label: "Shop smart",
-        fontSize: fontSize,
-      ),
-    );
+        period: const Duration(seconds: 12),
+        baseColor: const Color.fromARGB(255, 136, 255, 0),
+        highlightColor: Colors.orange,
+        child: TitlesTextWidget(
+          label: "La Chancha",
+          fontSize: fontSize,
+        ));
   }
 }
