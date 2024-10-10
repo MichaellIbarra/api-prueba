@@ -29,9 +29,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
   late TextEditingController _titleController,
       _priceController,
       _descriptionController,
-      _statusController,
-      _idCategoryController,
-      _imageUrlController;
+      _idCategoryController;
 
   @override
   void initState() {
@@ -39,9 +37,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     _titleController = TextEditingController(text: widget.productModel?.name);
     _priceController = TextEditingController(text: widget.productModel?.price.toString());
     _descriptionController = TextEditingController(text: widget.productModel?.description);
-    _statusController = TextEditingController(text: widget.productModel?.status);
     _idCategoryController = TextEditingController(text: widget.productModel?.idCategory.toString());
-    _imageUrlController = TextEditingController(text: widget.productModel?.imageUrl);
   }
 
   @override
@@ -49,9 +45,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     _titleController.dispose();
     _priceController.dispose();
     _descriptionController.dispose();
-    _statusController.dispose();
     _idCategoryController.dispose();
-    _imageUrlController.dispose();
     super.dispose();
   }
 
@@ -59,9 +53,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     _titleController.clear();
     _priceController.clear();
     _descriptionController.clear();
-    _statusController.clear();
     _idCategoryController.clear();
-    _imageUrlController.clear();
     removePickedImage();
   }
 
@@ -87,11 +79,11 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
       try {
         await ProductService.saveProduct(
           idCategory: int.parse(_idCategoryController.text),
-          imageUrl: _imageUrlController.text,
+          imageUrl: '', // Image URL is not needed
           name: _titleController.text,
           description: _descriptionController.text,
           price: double.parse(_priceController.text),
-          status: _statusController.text,
+          status: 'A', // Default status
           image: _pickedImage,
         );
         // Show success message or navigate to another screen
@@ -304,34 +296,12 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
-                      controller: _statusController,
-                      decoration: const InputDecoration(labelText: 'Status'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a status';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
                       controller: _idCategoryController,
                       decoration: const InputDecoration(labelText: 'Category ID'),
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a category ID';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _imageUrlController,
-                      decoration: const InputDecoration(labelText: 'Image URL'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter an image URL';
                         }
                         return null;
                       },
