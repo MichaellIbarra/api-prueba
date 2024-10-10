@@ -158,7 +158,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
         ),
         appBar: AppBar(
           centerTitle: true,
-          title: TitlesTextWidget(
+          title: const TitlesTextWidget(
             label: "Upload a new product",
           ),
         ),
