@@ -14,5 +14,5 @@ class ProductModel with ChangeNotifier {
     required this.description,
     required this.price,
     required this.status,
-  });
+  }); 
 }

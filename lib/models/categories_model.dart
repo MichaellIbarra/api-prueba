@@ -7,4 +7,4 @@ class CategoriesModel {
     required this.name,
     required this.status,
   });
-}
+} 
