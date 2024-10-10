@@ -1,5 +1,5 @@
+// edit_upload_product_form.dart
 import 'dart:io';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:myapp/consts/app_constants.dart';
 import 'package:myapp/models/product_model.dart';
 import 'package:myapp/services/my_app_functions.dart';
+import 'package:myapp/services/product_service.dart'; // Import the product service
 
 import '../consts/validator.dart';
 import '../widgets/subtitle_text.dart';
@@ -83,7 +84,25 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
     if (isValid) {
-      // Implement the upload logic here
+      try {
+        await ProductService.saveProduct(
+          idCategory: int.parse(_idCategoryController.text),
+          imageUrl: _imageUrlController.text,
+          name: _titleController.text,
+          description: _descriptionController.text,
+          price: double.parse(_priceController.text),
+          status: _statusController.text,
+          image: _pickedImage,
+        );
+        // Show success message or navigate to another screen
+      } catch (error) {
+        // Handle error
+        MyAppFunctions.showErrorOrWarningDialog(
+          context: context,
+          subtitle: "Failed to upload product",
+          fct: () {},
+        );
+      }
     }
   }
 

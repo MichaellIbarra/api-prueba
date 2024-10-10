@@ -42,6 +42,7 @@ dependencies:
   fancy_shimmer_image: ^2.0.3
   image_picker: ^1.1.2
   dotted_border: ^2.0.0+3
+  http: ^1.2.2
   # Utils
   uuid: ^3.0.7
 
