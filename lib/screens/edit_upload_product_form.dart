@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:myapp/consts/app_constants.dart';
+import 'package:myapp/models/product_model.dart';
 import 'package:myapp/services/my_app_functions.dart';
 
 import '../consts/validator.dart';
@@ -15,7 +15,8 @@ import '../widgets/title_text.dart';
 class EditOrUploadProductScreen extends StatefulWidget {
   static const routeName = '/EditOrUploadProductScreen';
 
-  const EditOrUploadProductScreen({super.key});
+  const EditOrUploadProductScreen({super.key, this.productModel});
+  final ProductModel? productModel;
   @override
   State<EditOrUploadProductScreen> createState() =>
       _EditOrUploadProductScreenState();
@@ -29,12 +30,17 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
       _descriptionController,
       _quantityController;
   String? _categoryValue;
+  bool isEditing = false;
+  String? productNetworkImage;
+
   @override
   void initState() {
-    _titleController = TextEditingController(text: "");
-    _priceController = TextEditingController(text: "");
-    _descriptionController = TextEditingController(text: "");
-    _quantityController = TextEditingController(text: "");
+    _titleController = TextEditingController(text: widget.productModel?.name);
+    _priceController = TextEditingController(text: widget.productModel?.price);
+    _descriptionController =
+        TextEditingController(text: widget.productModel?.description);
+    _quantityController =
+        TextEditingController(text: widget.productModel?.price);
 
     super.initState();
   }
@@ -143,7 +149,9 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                       fontSize: 20,
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    clearForm();
+                  },
                 ),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
@@ -160,7 +168,11 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                     "Upload Product",
                   ),
                   onPressed: () {
-                    _uploadProduct();
+                    if (isEditing) {
+                      _editProduct();
+                    } else {
+                      _uploadProduct();
+                    }
                   },
                 ),
               ],
@@ -169,8 +181,8 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
         ),
         appBar: AppBar(
           centerTitle: true,
-          title: const TitlesTextWidget(
-            label: "Upload a new product",
+          title: TitlesTextWidget(
+            label: isEditing ? "Edit Product" : "Upload a new product",
           ),
         ),
         body: SafeArea(
@@ -183,8 +195,19 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                 // TODO: Implement the image picker
                 // Image Picker
 
- // Image Picker
-                if (_pickedImage == null) ...[
+                // Image Picker
+                // Image Picker
+                if (isEditing && productNetworkImage != null) ...[
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      productNetworkImage!,
+                      // width: size.width * 0.7,
+                      height: size.width * 0.5,
+                      alignment: Alignment.center,
+                    ),
+                  ),
+                ] else if  (_pickedImage == null) ...[
                   SizedBox(
                     width: size.width * 0.4 + 10,
                     height: size.width * 0.4,
@@ -244,7 +267,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                     ],
                   )
                 ],
-                
+
                 const SizedBox(
                   height: 25,
                 ),
