@@ -4,7 +4,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:myapp/consts/app_constants.dart';
 import 'package:myapp/models/product_model.dart';
 import 'package:myapp/models/categories_model.dart';
 import 'package:myapp/services/my_app_functions.dart';
@@ -79,15 +78,6 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
   }
 
   Future<void> _uploadProduct() async {
-    if (_pickedImage == null) {
-      MyAppFunctions.showErrorOrWarningDialog(
-        context: context,
-        subtitle: "Please pick up an image",
-        fct: () {},
-      );
-
-      return;
-    }
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
     if (isValid) {
@@ -142,7 +132,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
       },
       child: Scaffold(
         bottomSheet: SizedBox(
-          height: kBottomNavigationBarHeight + 10,
+          height: kBottomNavigationBarHeight + 15,
           child: Material(
             color: Theme.of(context).scaffoldBackgroundColor,
             child: Row(
@@ -156,11 +146,11 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  icon: const Icon(Icons.clear),
+                  icon: const Icon(Icons.remove_circle_outline),
                   label: const Text(
-                    "Clear",
+                    "Limpiar",
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 16,
                     ),
                   ),
                   onPressed: () {
@@ -174,8 +164,8 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  icon: const Icon(Icons.upload),
-                  label: const Text("Upload Product"),
+                  icon: const Icon(Icons.add_task),
+                  label: const Text("Guardar Producto"),
                   onPressed: _uploadProduct,
                 ),
               ],
@@ -185,19 +175,18 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
         appBar: AppBar(
           centerTitle: true,
           title: const TitlesTextWidget(
-            label: "Upload a new product",
+            label: "Nuevo Producto",
           ),
         ),
         body: SafeArea(
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(18.0),
               child: Form(
                 key: _formKey,
                 child: Column(
                   children: [
-                    const SizedBox(height: 20),
                     if (_pickedImage == null)
                       SizedBox(
                         width: size.width * 0.4 + 10,
@@ -215,7 +204,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                                 ),
                                 TextButton(
                                   onPressed: localImagePicker,
-                                  child: const Text("Pick Product Image"),
+                                  child: const Text("Seleccionar imagen"),
                                 ),
                               ],
                             ),
@@ -237,22 +226,23 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                         children: [
                           TextButton(
                             onPressed: localImagePicker,
-                            child: const Text("Pick another image"),
+                            child: const Text("Otra imagen"),
                           ),
                           TextButton(
                             onPressed: removePickedImage,
                             child: const Text(
-                              "Remove image",
+                              "Eliminar imagen",
                               style: TextStyle(color: Colors.red),
                             ),
                           ),
                         ],
                       ),
                     ],
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     DropdownButtonFormField<int>(
                       value: _selectedCategoryId,
-                      decoration: const InputDecoration(labelText: 'Category'),
+                      decoration:
+                          const InputDecoration(labelText: 'Categorias'),
                       items: _categories.map((category) {
                         return DropdownMenuItem<int>(
                           value: category.id,
@@ -266,7 +256,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                       },
                       validator: (value) {
                         if (value == null) {
-                          return 'Please select a category';
+                          return 'Seleccione una categoria';
                         }
                         return null;
                       },
@@ -279,10 +269,10 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                           child: TextFormField(
                             controller: _titleController,
                             decoration:
-                                const InputDecoration(labelText: 'Title'),
+                                const InputDecoration(labelText: 'Nombre'),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter a title';
+                                return 'Ingrese un nombre';
                               }
                               return null;
                             },
@@ -295,15 +285,15 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                           flex: 1,
                           child: TextFormField(
                             controller: _priceController,
-                            key: const ValueKey('Price \$'),
+                            key: const ValueKey('Precio \$'),
                             keyboardType: TextInputType.number,
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.allow(
-                                RegExp(r'^(\d+)?\.?\d{0,2}'),
+                                RegExp(r'^\d{0,6}(\.\d{0,2})?$'),
                               ),
                             ],
                             decoration: const InputDecoration(
-                              hintText: 'Price',
+                              hintText: 'Precio',
                               prefix: SubtitleText(
                                 label: "S/. ",
                                 color: Colors.blue,
