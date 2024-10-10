@@ -6,8 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:myapp/consts/app_constants.dart';
 import 'package:myapp/models/product_model.dart';
+import 'package:myapp/models/categories_model.dart';
 import 'package:myapp/services/my_app_functions.dart';
-import 'package:myapp/services/product_service.dart'; // Import the product service
+import 'package:myapp/services/product_service.dart';
+import 'package:myapp/services/category_service.dart'; // Import the category service
 
 import '../consts/validator.dart';
 import '../widgets/subtitle_text.dart';
@@ -28,16 +30,30 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
   XFile? _pickedImage;
   late TextEditingController _titleController,
       _priceController,
-      _descriptionController,
-      _idCategoryController;
+      _descriptionController;
+  List<CategoriesModel> _categories = [];
+  int? _selectedCategoryId;
 
   @override
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: widget.productModel?.name);
-    _priceController = TextEditingController(text: widget.productModel?.price.toString());
-    _descriptionController = TextEditingController(text: widget.productModel?.description);
-    _idCategoryController = TextEditingController(text: widget.productModel?.idCategory.toString());
+    _priceController =
+        TextEditingController(text: widget.productModel?.price.toString());
+    _descriptionController =
+        TextEditingController(text: widget.productModel?.description);
+    _fetchCategories();
+  }
+
+  Future<void> _fetchCategories() async {
+    try {
+      final categories = await CategoryService.fetchCategories();
+      setState(() {
+        _categories = categories;
+      });
+    } catch (error) {
+      // Handle error
+    }
   }
 
   @override
@@ -45,7 +61,6 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     _titleController.dispose();
     _priceController.dispose();
     _descriptionController.dispose();
-    _idCategoryController.dispose();
     super.dispose();
   }
 
@@ -53,7 +68,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     _titleController.clear();
     _priceController.clear();
     _descriptionController.clear();
-    _idCategoryController.clear();
+    _selectedCategoryId = null;
     removePickedImage();
   }
 
@@ -78,7 +93,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     if (isValid) {
       try {
         await ProductService.saveProduct(
-          idCategory: int.parse(_idCategoryController.text),
+          idCategory: _selectedCategoryId!,
           imageUrl: '', // Image URL is not needed
           name: _titleController.text,
           description: _descriptionController.text,
@@ -175,6 +190,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
         ),
         body: SafeArea(
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Form(
@@ -234,19 +250,47 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                       ),
                     ],
                     const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _titleController,
-                      decoration: const InputDecoration(labelText: 'Title'),
+                    DropdownButtonFormField<int>(
+                      value: _selectedCategoryId,
+                      decoration: const InputDecoration(labelText: 'Category'),
+                      items: _categories.map((category) {
+                        return DropdownMenuItem<int>(
+                          value: category.id,
+                          child: Text(category.name),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedCategoryId = value;
+                        });
+                      },
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a title';
+                        if (value == null) {
+                          return 'Please select a category';
                         }
                         return null;
                       },
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 15),
                     Row(
                       children: [
+                        Flexible(
+                          flex: 1,
+                          child: TextFormField(
+                            controller: _titleController,
+                            decoration:
+                                const InputDecoration(labelText: 'Title'),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter a title';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
                         Flexible(
                           flex: 1,
                           child: TextFormField(
@@ -276,7 +320,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 15),
                     TextFormField(
                       controller: _descriptionController,
                       minLines: 5,
@@ -295,17 +339,6 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                       onTap: () {},
                     ),
                     const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _idCategoryController,
-                      decoration: const InputDecoration(labelText: 'Category ID'),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a category ID';
-                        }
-                        return null;
-                      },
-                    ),
                   ],
                 ),
               ),
