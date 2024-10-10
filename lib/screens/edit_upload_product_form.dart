@@ -67,7 +67,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
       _pickedImage = null;
     });
   }
-
+5666656
   Future<void> _uploadProduct() async {
     if (_pickedImage == null) {
       MyAppFunctions.showErrorOrWarningDialog(
@@ -83,10 +83,10 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     if (isValid) {}
   }
 
-  Future<void> _editProduct() async {
+ Future<void> _editProduct() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
-    if (_pickedImage == null) {
+    if (_pickedImage == null && productNetworkImage == null) {
       MyAppFunctions.showErrorOrWarningDialog(
         context: context,
         subtitle: "Please pick up an image",
