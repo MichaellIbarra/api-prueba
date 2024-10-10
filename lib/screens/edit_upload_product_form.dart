@@ -204,6 +204,24 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                           alignment: Alignment.center,
                         ),
                       ),
+                    if (_pickedImage != null) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton(
+                            onPressed: localImagePicker,
+                            child: const Text("Pick another image"),
+                          ),
+                          TextButton(
+                            onPressed: removePickedImage,
+                            child: const Text(
+                              "Remove image",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                     const SizedBox(height: 20),
                     TextFormField(
                       controller: _titleController,
@@ -216,16 +234,36 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                       },
                     ),
                     const SizedBox(height: 20),
-                    TextFormField(
-                      controller: _priceController,
-                      decoration: const InputDecoration(labelText: 'Price'),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a price';
-                        }
-                        return null;
-                      },
+                    Row(
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          child: TextFormField(
+                            controller: _priceController,
+                            key: const ValueKey('Price \$'),
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                RegExp(r'^(\d+)?\.?\d{0,2}'),
+                              ),
+                            ],
+                            decoration: const InputDecoration(
+                              hintText: 'Price',
+                              prefix: SubtitleText(
+                                label: "S/. ",
+                                color: Colors.blue,
+                                fontSize: 16,
+                              ),
+                            ),
+                            validator: (value) {
+                              return MyValidators.uploadProdTexts(
+                                value: value,
+                                toBeReturnedString: "Price is missing",
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
