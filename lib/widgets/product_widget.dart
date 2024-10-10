@@ -1,70 +1,56 @@
-import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
+// product_widget.dart
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:myapp/models/product_model.dart';
+import 'package:myapp/widgets/subtitle_text.dart';
 
-import 'subtitle_text.dart';
-import 'title_text.dart';
+class ProductWidget extends StatelessWidget {
+  final ProductModel product;
 
-class ProductWidget extends StatefulWidget {
-  const ProductWidget({
-    super.key,
-    required this.productId,
-  });
-  final String productId;
-  @override
-  State<ProductWidget> createState() => _ProductWidgetState();
-}
+  const ProductWidget({Key? key, required this.product}) : super(key: key);
 
-class _ProductWidgetState extends State<ProductWidget> {
   @override
   Widget build(BuildContext context) {
-    final getCurrProduct = productsProvider.findByProdId(widget.productId);
-    Size size = MediaQuery.of(context).size;
-
-    return getCurrProduct == null
-        ? const SizedBox.shrink()
-        : Padding(
-            padding: const EdgeInsets.all(0.0),
-            child: GestureDetector(
-              onTap: () {},
-              child: Column(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: FancyShimmerImage(
-                      imageUrl: getCurrProduct.productImage,
-                      height: size.height * 0.22,
-                      width: double.infinity,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 12.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: TitlesTextWidget(
-                      label: getCurrProduct.productTitle,
-                      fontSize: 18,
-                      maxLines: 2,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 6.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: SubtitleText(
-                      label: "${getCurrProduct.productPrice}\$",
-                      fontWeight: FontWeight.w600,
-                      color: Colors.blue,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 12.0,
-                  ),
-                ],
+    return Card(
+      elevation: 5,
+      margin: const EdgeInsets.all(10),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(
+              product.imageUrl,
+              height: 100,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              product.name,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+              maxLines: 2,
+            ),
+            const SizedBox(height: 6.0),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SubtitleText(
+                label: "${product.price}\$",
+                fontWeight: FontWeight.w600,
+                color: Colors.blue,
               ),
             ),
-          );
+            const SizedBox(height: 12.0),
+            Text(
+              product.description,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
