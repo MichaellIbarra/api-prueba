@@ -1,9 +1,10 @@
 // product_service.dart
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:myapp/services/config.dart';
 
 class ProductService {
-  static const String _baseUrl = 'https://congenial-succotash-7g576r4g4r53x9vp-8085.app.github.dev/api/v1/admin/products';
+  static const String _baseUrl = '$baseUrl/api/v1/admin/products';
 
   static Future<void> saveProduct({
     required int idCategory,

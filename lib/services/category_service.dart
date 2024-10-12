@@ -2,9 +2,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:myapp/models/categories_model.dart';
+import 'package:myapp/services/config.dart';
 
 class CategoryService {
-  static const String _baseUrl = 'https://congenial-succotash-7g576r4g4r53x9vp-8085.app.github.dev/api/v1/admin/categories';
+  static const String _baseUrl = '$baseUrl/api/v1/admin/categories';
 
   static Future<List<CategoriesModel>> fetchCategories() async {
     final response = await http.get(Uri.parse(_baseUrl));
