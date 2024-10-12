@@ -29,7 +29,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
   XFile? _pickedImage;
   late TextEditingController _titleController,
       _priceController,
-      _descriptionController;
+      _descriptionController, _imageUrl;
   bool isEditing = false;
   List<CategoriesModel> _categories = [];
   int? _selectedCategoryId;
@@ -45,6 +45,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
       _descriptionController = TextEditingController(text: widget.productModel?.description);
       _selectedCategoryId = widget.productModel?.idCategory;
       productNetworkImage = widget.productModel?.imageUrl;
+      _imageUrl = TextEditingController(text: widget.productModel?.imageUrl);
     } else {
       _titleController = TextEditingController();
       _priceController = TextEditingController();
@@ -121,7 +122,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
         await ProductService.saveProduct(
           id: widget.productModel?.id,
           idCategory: _selectedCategoryId!,
-          imageUrl: _pickedImage != null ? '' : productNetworkImage ?? '', // Use existing image URL if no new image is picked
+          imageUrl: _imageUrl.text,
           name: _titleController.text,
           description: _descriptionController.text,
           price: double.parse(_priceController.text),
