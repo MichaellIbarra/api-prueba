@@ -25,14 +25,14 @@ class DashboardButtonsModel {
           },
         ),
         DashboardButtonsModel(
-          text: "inspect all products",
+          text: "ver Productos",
           imagePath: AssetsManager.shoppingCart,
           onPressed: () {
             Navigator.pushNamed(context, SearchScreen.routeName);
           },
         ),
         DashboardButtonsModel(
-          text: "View Orders",
+          text: "Usuarios",
           imagePath: AssetsManager.shoppingCart,
           onPressed: () {
             // Navigator.pushNamed(context, SearchScreen.routeName);

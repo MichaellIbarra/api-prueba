@@ -31,7 +31,7 @@ class _SearchScreenState extends State<SearchScreen> {
     ProductModel(
       id: 1,
       idCategory: 1,
-      imageUrl: 'https://via.placeholder.com/150',
+      imageUrl: 'https://th.bing.com/th/id/OIP.JZGPXS5azcoxkEuQcvyHzQHaEk?rs=1&pid=ImgDetMain',
       name: 'Product 1',
       description: 'Description for product 1',
       price: 10.0,

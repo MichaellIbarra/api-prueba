@@ -238,29 +238,6 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                         ],
                       ),
                     ],
-                    const SizedBox(height: 10),
-                    DropdownButtonFormField<int>(
-                      value: _selectedCategoryId,
-                      decoration:
-                          const InputDecoration(labelText: 'Categorias'),
-                      items: _categories.map((category) {
-                        return DropdownMenuItem<int>(
-                          value: category.id,
-                          child: Text(category.name),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedCategoryId = value;
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return 'Seleccione una categoria';
-                        }
-                        return null;
-                      },
-                    ),
                     const SizedBox(height: 15),
                     Row(
                       children: [
@@ -309,6 +286,29 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                           ),
                         ),
                       ],
+                    ),
+                    const SizedBox(height: 15),
+                    DropdownButtonFormField<int>(
+                      value: _selectedCategoryId,
+                      decoration:
+                          const InputDecoration(labelText: 'Categorias'),
+                      items: _categories.map((category) {
+                        return DropdownMenuItem<int>(
+                          value: category.id,
+                          child: Text(category.name),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedCategoryId = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Seleccione una categoria';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 15),
                     TextFormField(
