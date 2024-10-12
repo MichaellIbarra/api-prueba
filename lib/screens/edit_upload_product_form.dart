@@ -31,20 +31,20 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
       _priceController,
       _descriptionController;
   bool isEditing = false;
-  List<CategoriesModel> _categories = [];
-  int? _selectedCategoryId;
   String? productNetworkImage;
+  int? _selectedCategoryId;
+  List<CategoriesModel> _categories = [];
 
   @override
   void initState() {
     super.initState();
     if (widget.productModel != null) {
       isEditing = true;
-      _titleController = TextEditingController(text: widget.productModel?.name);
-      _priceController = TextEditingController(text: widget.productModel?.price.toString());
-      _descriptionController = TextEditingController(text: widget.productModel?.description);
-      _selectedCategoryId = widget.productModel?.idCategory;
-      productNetworkImage = widget.productModel?.imageUrl;
+      _titleController = TextEditingController(text: widget.productModel!.name);
+      _priceController = TextEditingController(text: widget.productModel!.price.toString());
+      _descriptionController = TextEditingController(text: widget.productModel!.description);
+      productNetworkImage = widget.productModel!.imageUrl;
+      _selectedCategoryId = widget.productModel!.idCategory;
     } else {
       _titleController = TextEditingController();
       _priceController = TextEditingController();
@@ -53,6 +53,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     _fetchCategories();
   }
 
+ 
   Future<void> _fetchCategories() async {
     try {
       final categories = await CategoryService.fetchCategories();
@@ -80,20 +81,22 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     removePickedImage();
   }
 
-   void removePickedImage() {
+  void removePickedImage() {
     setState(() {
       _pickedImage = null;
       productNetworkImage = null;
     });
   }
+
   Future<void> _uploadProduct() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
     if (isValid) {
       try {
         await ProductService.saveProduct(
+          id: widget.productModel?.id,
           idCategory: _selectedCategoryId!,
-          imageUrl: '', // Image URL is not needed
+          imageUrl: _pickedImage == null ? productNetworkImage ?? '' : '', // Use existing image URL if no new image is picked
           name: _titleController.text,
           description: _descriptionController.text,
           price: double.parse(_priceController.text),
@@ -237,30 +240,21 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                             ),
                           ),
                         ),
-                      )
-                    else
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.file(
-                          File(_pickedImage!.path),
-                          height: size.width * 0.5,
-                          alignment: Alignment.center,
-                        ),
                       ),
-                    if (_pickedImage != null || productNetworkImage != null) ...[
+                     if (_pickedImage != null || productNetworkImage != null) ...[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton(
-                             onPressed: () {
-                          localImagePicker();
-                        },
+                            onPressed: () {
+                              localImagePicker();
+                            },
                             child: const Text("Otra imagen"),
                           ),
                           TextButton(
-                             onPressed: () {
-                          removePickedImage();
-                        },
+                            onPressed: () {
+                              removePickedImage();
+                            },
                             child: const Text(
                               "Eliminar imagen",
                               style: TextStyle(color: Colors.red),
