@@ -29,7 +29,8 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
   XFile? _pickedImage;
   late TextEditingController _titleController,
       _priceController,
-      _descriptionController, _imageUrl;
+      _descriptionController,
+      _imageUrl;
   bool isEditing = false;
   List<CategoriesModel> _categories = [];
   int? _selectedCategoryId;
@@ -41,8 +42,10 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     if (widget.productModel != null) {
       isEditing = true;
       _titleController = TextEditingController(text: widget.productModel?.name);
-      _priceController = TextEditingController(text: widget.productModel?.price.toString());
-      _descriptionController = TextEditingController(text: widget.productModel?.description);
+      _priceController =
+          TextEditingController(text: widget.productModel?.price.toString());
+      _descriptionController =
+          TextEditingController(text: widget.productModel?.description);
       _selectedCategoryId = widget.productModel?.idCategory;
       productNetworkImage = widget.productModel?.imageUrl;
       _imageUrl = TextEditingController(text: widget.productModel?.imageUrl);
@@ -81,12 +84,13 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     removePickedImage();
   }
 
-   void removePickedImage() {
+  void removePickedImage() {
     setState(() {
       _pickedImage = null;
       productNetworkImage = null;
     });
   }
+
   Future<void> _uploadProduct() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
@@ -102,7 +106,8 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
           image: _pickedImage,
         );
         clearForm(); // Clear the form after saving the product
-        Navigator.pushReplacementNamed(context, '/SearchScreen'); // Navigate to SearchScreen
+        Navigator.pushReplacementNamed(
+            context, '/SearchScreen'); // Navigate to SearchScreen
       } catch (error) {
         // Handle error
         MyAppFunctions.showErrorOrWarningDialog(
@@ -114,7 +119,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     }
   }
 
- Future<void> _editProduct() async {
+  Future<void> _editProduct() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
     if (isValid) {
@@ -129,7 +134,8 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
           status: 'A', // Default status
           image: _pickedImage,
         );
-        Navigator.pushReplacementNamed(context, '/SearchScreen'); // Navigate to SearchScreen
+        Navigator.pushReplacementNamed(
+            context, '/SearchScreen'); // Navigate to SearchScreen
       } catch (error) {
         // Handle error
         MyAppFunctions.showErrorOrWarningDialog(
@@ -140,6 +146,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
       }
     }
   }
+
   Future<void> localImagePicker() async {
     final ImagePicker picker = ImagePicker();
     await MyAppFunctions.imagePickerDialog(
@@ -274,20 +281,23 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                           alignment: Alignment.center,
                         ),
                       ),
-                    if (_pickedImage != null || productNetworkImage != null) ...[
+                    if (_pickedImage != null ||
+                        productNetworkImage != null) ...[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          if (_pickedImage !=
+                              null) // Mostrar "Otra imagen" solo si _pickedImage no es null
+                            TextButton(
+                              onPressed: () {
+                                localImagePicker();
+                              },
+                              child: const Text("Otra imagen"),
+                            ),
                           TextButton(
-                             onPressed: () {
-                          localImagePicker();
-                        },
-                            child: const Text("Otra imagen"),
-                          ),
-                          TextButton(
-                             onPressed: () {
-                          removePickedImage();
-                        },
+                            onPressed: () {
+                              removePickedImage();
+                            },
                             child: const Text(
                               "Eliminar imagen",
                               style: TextStyle(color: Colors.red),
