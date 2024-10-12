@@ -91,10 +91,15 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
           status: 'A', // Default status
           image: _pickedImage,
         );
-        // Show success message or navigate to another screen
+        clearForm(); // Clear the form after saving the product
+        Navigator.pushReplacementNamed(context, '/SearchScreen'); // Navigate to SearchScreen
       } catch (error) {
         // Handle error
-        
+        MyAppFunctions.showErrorOrWarningDialog(
+          context: context,
+          subtitle: "Failed to upload product",
+          fct: () {},
+        );
       }
     }
   }
@@ -273,17 +278,11 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                                 fontSize: 16,
                               ),
                             ),
-                            validator: (value) {
-                              return MyValidators.uploadProdTexts(
-                                value: value,
-                                toBeReturnedString: "Price is missing",
-                              );
-                            },
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 15),
+                     const SizedBox(height: 15),
                     DropdownButtonFormField<int>(
                       value: _selectedCategoryId,
                       decoration:
@@ -324,7 +323,6 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                       },
                       onTap: () {},
                     ),
-                    const SizedBox(height: 20),
                   ],
                 ),
               ),
