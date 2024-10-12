@@ -80,12 +80,12 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     removePickedImage();
   }
 
-  void removePickedImage() {
+   void removePickedImage() {
     setState(() {
       _pickedImage = null;
+      productNetworkImage = null;
     });
   }
-
   Future<void> _uploadProduct() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
@@ -247,16 +247,20 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                           alignment: Alignment.center,
                         ),
                       ),
-                    if (_pickedImage != null) ...[
+                    if (_pickedImage != null || productNetworkImage != null) ...[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton(
-                            onPressed: localImagePicker,
+                             onPressed: () {
+                          localImagePicker();
+                        },
                             child: const Text("Otra imagen"),
                           ),
                           TextButton(
-                            onPressed: removePickedImage,
+                             onPressed: () {
+                          removePickedImage();
+                        },
                             child: const Text(
                               "Eliminar imagen",
                               style: TextStyle(color: Colors.red),
