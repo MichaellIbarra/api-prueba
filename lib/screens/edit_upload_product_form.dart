@@ -113,32 +113,6 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     }
   }
 
- Future<void> _editProduct() async {
-    final isValid = _formKey.currentState!.validate();
-    FocusScope.of(context).unfocus();
-    if (isValid) {
-      try {
-        await ProductService.saveProduct(
-          id: widget.productModel?.id,
-          idCategory: _selectedCategoryId!,
-          imageUrl: _pickedImage != null ? '' : productNetworkImage ?? '', // Use existing image URL if no new image is picked
-          name: _titleController.text,
-          description: _descriptionController.text,
-          price: double.parse(_priceController.text),
-          status: 'A', // Default status
-          image: _pickedImage,
-        );
-        Navigator.pushReplacementNamed(context, '/SearchScreen'); // Navigate to SearchScreen
-      } catch (error) {
-        // Handle error
-        MyAppFunctions.showErrorOrWarningDialog(
-          context: context,
-          subtitle: "Failed to update product",
-          fct: () {},
-        );
-      }
-    }
-  }
   Future<void> localImagePicker() async {
     final ImagePicker picker = ImagePicker();
     await MyAppFunctions.imagePickerDialog(
@@ -206,7 +180,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                   ),
                   onPressed: () {
                     if (isEditing) {
-                      _editProduct();
+                      // _editProduct();
                     } else {
                       _uploadProduct();
                     }
