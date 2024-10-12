@@ -4,6 +4,7 @@ import '../models/product_model.dart';
 import '../services/product_service.dart';
 import '../widgets/product_widget.dart';
 import '../widgets/title_text.dart';
+import 'edit_upload_product_form.dart';
 
 class SearchScreen extends StatefulWidget {
   static const routeName = '/SearchScreen';
@@ -125,10 +126,21 @@ class _SearchScreenState extends State<SearchScreen> {
                               childAspectRatio: 0.75,
                             ),
                             itemBuilder: (context, index) {
+                              final product = searchTextController.text.isNotEmpty
+                                  ? productListSearch[index]
+                                  : filteredProductList[index];
                               return ProductWidget(
-                                product: searchTextController.text.isNotEmpty
-                                    ? productListSearch[index]
-                                    : filteredProductList[index],
+                                product: product,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditOrUploadProductScreen(
+                                        productModel: product,
+                                      ),
+                                    ),
+                                  );
+                                },
                               );
                             },
                           ),

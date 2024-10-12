@@ -30,17 +30,26 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
   late TextEditingController _titleController,
       _priceController,
       _descriptionController;
+  bool isEditing = false;
   List<CategoriesModel> _categories = [];
   int? _selectedCategoryId;
+  String? productNetworkImage;
 
   @override
   void initState() {
     super.initState();
-    _titleController = TextEditingController(text: widget.productModel?.name);
-    _priceController =
-        TextEditingController(text: widget.productModel?.price.toString());
-    _descriptionController =
-        TextEditingController(text: widget.productModel?.description);
+    if (widget.productModel != null) {
+      isEditing = true;
+      _titleController = TextEditingController(text: widget.productModel?.name);
+      _priceController = TextEditingController(text: widget.productModel?.price.toString());
+      _descriptionController = TextEditingController(text: widget.productModel?.description);
+      _selectedCategoryId = widget.productModel?.idCategory;
+      productNetworkImage = widget.productModel?.imageUrl;
+    } else {
+      _titleController = TextEditingController();
+      _priceController = TextEditingController();
+      _descriptionController = TextEditingController();
+    }
     _fetchCategories();
   }
 
@@ -166,8 +175,16 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                     ),
                   ),
                   icon: const Icon(Icons.add_task),
-                  label: const Text("Guardar Producto"),
-                  onPressed: _uploadProduct,
+                  label: Text(
+                    isEditing ? "Edit Product" : "Upload Product",
+                  ),
+                  onPressed: () {
+                    if (isEditing) {
+                      // _editProduct();
+                    } else {
+                      _uploadProduct();
+                    }
+                  },
                 ),
               ],
             ),
@@ -175,8 +192,8 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
         ),
         appBar: AppBar(
           centerTitle: true,
-          title: const TitlesTextWidget(
-            label: "Nuevo Producto",
+          title: TitlesTextWidget(
+            label: isEditing ? "Edit Product" : "Upload a new product",
           ),
         ),
         body: SafeArea(
@@ -188,7 +205,16 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    if (_pickedImage == null)
+                    if (isEditing && productNetworkImage != null) ...[
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          productNetworkImage!,
+                          height: size.width * 0.5,
+                          alignment: Alignment.center,
+                        ),
+                      ),
+                    ] else if (_pickedImage == null)
                       SizedBox(
                         width: size.width * 0.4 + 10,
                         height: size.width * 0.4,
@@ -282,7 +308,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                         ),
                       ],
                     ),
-                     const SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     DropdownButtonFormField<int>(
                       value: _selectedCategoryId,
                       decoration:
