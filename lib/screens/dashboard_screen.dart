@@ -14,7 +14,7 @@ class DashboardScreen extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const TitlesTextWidget(label: "Dashboard Screen"),
+        title: const TitlesTextWidget(label: "Dashboard Admin"),
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Image.asset(AssetsManager.shoppingCart),

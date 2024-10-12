@@ -40,13 +40,14 @@ class ProductWidget extends StatelessWidget {
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
-                maxLines: 2,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 6.0),
               Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: SubtitleText(
-                  label: "${product.price}\$",
+                  label: "S/.${product.price}",
                   fontWeight: FontWeight.w600,
                   color: Colors.blue,
                 ),
@@ -54,7 +55,7 @@ class ProductWidget extends StatelessWidget {
               const SizedBox(height: 12.0),
               Text(
                 product.description,
-                maxLines: 2,
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ],
