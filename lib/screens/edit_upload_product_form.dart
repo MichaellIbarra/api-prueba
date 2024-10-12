@@ -94,11 +94,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
         // Show success message or navigate to another screen
       } catch (error) {
         // Handle error
-        MyAppFunctions.showErrorOrWarningDialog(
-          context: context,
-          subtitle: "Failed to upload product",
-          fct: () {},
-        );
+        
       }
     }
   }
