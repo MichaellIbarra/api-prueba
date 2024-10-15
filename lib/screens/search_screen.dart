@@ -132,7 +132,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               return ProductWidget(
                                 product: product,
                                 onTap: () {
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => EditOrUploadProductScreen(

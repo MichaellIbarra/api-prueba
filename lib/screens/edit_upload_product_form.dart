@@ -91,7 +91,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     });
   }
 
-  Future<void> _uploadProduct() async {
+    Future<void> _uploadProduct() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
     if (isValid) {
