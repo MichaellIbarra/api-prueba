@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:myapp/models/product_model.dart';
 import 'package:myapp/models/categories_model.dart';
+import 'package:myapp/screens/search_screen.dart';
 import 'package:myapp/services/my_app_functions.dart';
 import 'package:myapp/services/product_service.dart';
 import 'package:myapp/services/category_service.dart'; // Import the category service
@@ -91,32 +92,32 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
     });
   }
 
-  Future<void> _uploadProduct() async {
-    final isValid = _formKey.currentState!.validate();
-    FocusScope.of(context).unfocus();
-    if (isValid) {
-      try {
-        await ProductService.saveProduct(
-          idCategory: _selectedCategoryId!,
-          imageUrl: '', // Image URL is not needed
-          name: _titleController.text,
-          description: _descriptionController.text,
-          price: double.parse(_priceController.text),
-          status: 'A', // Default status
-          image: _pickedImage,
-        );
-        clearForm(); // Clear the form after saving the product
-        Navigator.pop(context); // Go back to the previous screen
-      } catch (error) {
-        // Handle error
-        MyAppFunctions.showErrorOrWarningDialog(
-          context: context,
-          subtitle: "Failed to upload product",
-          fct: () {},
-        );
-      }
+ Future<void> _uploadProduct() async {
+  final isValid = _formKey.currentState!.validate();
+  FocusScope.of(context).unfocus();
+  if (isValid) {
+    try {
+      await ProductService.saveProduct(
+        idCategory: _selectedCategoryId!,
+        imageUrl: '', // Image URL is not needed
+        name: _titleController.text,
+        description: _descriptionController.text,
+        price: double.parse(_priceController.text),
+        status: 'A', // Default status
+        image: _pickedImage,
+      );
+      clearForm(); // Clear the form after saving the product
+      Navigator.pushReplacementNamed(context, SearchScreen.routeName); // Navigate to SearchScreen
+    } catch (error) {
+      // Handle error
+      MyAppFunctions.showErrorOrWarningDialog(
+        context: context,
+        subtitle: "Failed to upload product",
+        fct: () {},
+      );
     }
   }
+}
 
   Future<void> _editProduct() async {
     final isValid = _formKey.currentState!.validate();

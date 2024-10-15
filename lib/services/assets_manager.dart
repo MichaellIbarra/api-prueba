@@ -43,6 +43,7 @@ class AssetsManager {
   static String pc = "$categoriesImagesPath/pc.png";
 
   static String menu = "$categoriesImagesPath/menu.png";
+  static String viewMenu = "$categoriesImagesPath/restaurant-menu.png";
   
   static String dashboardImagesPath = "assets/images/dashboard";
   static String order = "$dashboardImagesPath/order.png";

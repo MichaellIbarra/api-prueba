@@ -18,15 +18,15 @@ class DashboardButtonsModel {
 
   static List<DashboardButtonsModel> dashboardBtnList(context) => [
         DashboardButtonsModel(
-          text: "Add a new product",
+          text: "Agregar Producto",
           imagePath: AssetsManager.menu,
           onPressed: () {
             Navigator.pushNamed(context, EditOrUploadProductScreen.routeName);
           },
         ),
         DashboardButtonsModel(
-          text: "ver Productos",
-          imagePath: AssetsManager.shoppingCart,
+          text: "Ver Productos",
+          imagePath: AssetsManager.viewMenu,
           onPressed: () {
             Navigator.pushNamed(context, SearchScreen.routeName);
           },
