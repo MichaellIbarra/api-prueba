@@ -106,8 +106,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
           image: _pickedImage,
         );
         clearForm(); // Clear the form after saving the product
-        Navigator.pushReplacementNamed(
-            context, '/SearchScreen'); // Navigate to SearchScreen
+        Navigator.pop(context); // Go back to the previous screen
       } catch (error) {
         // Handle error
         MyAppFunctions.showErrorOrWarningDialog(
@@ -134,8 +133,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
           status: 'A', // Default status
           image: _pickedImage,
         );
-        Navigator.pushReplacementNamed(
-            context, '/SearchScreen'); // Navigate to SearchScreen
+        Navigator.pop(context); // Go back to the previous screen
       } catch (error) {
         // Handle error
         MyAppFunctions.showErrorOrWarningDialog(
@@ -146,6 +144,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
       }
     }
   }
+
 
   Future<void> localImagePicker() async {
     final ImagePicker picker = ImagePicker();

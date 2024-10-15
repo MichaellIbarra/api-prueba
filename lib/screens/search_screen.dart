@@ -129,10 +129,10 @@ class _SearchScreenState extends State<SearchScreen> {
                               final product = searchTextController.text.isNotEmpty
                                   ? productListSearch[index]
                                   : filteredProductList[index];
-                              return ProductWidget(
+                               return ProductWidget(
                                 product: product,
-                                onTap: () {
-                                  Navigator.pushReplacement(
+                                onTap: () async {
+                                  await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => EditOrUploadProductScreen(
@@ -140,6 +140,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                       ),
                                     ),
                                   );
+                                  // Refetch products after returning from edit screen
+                                  _fetchProducts();
                                 },
                               );
                             },
