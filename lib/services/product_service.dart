@@ -21,6 +21,8 @@ class ProductService {
     var request = http.MultipartRequest('POST', Uri.parse(_baseUrl));
     if (id != null) {
       request.fields['id'] = id.toString();
+    }else{
+      request.fields['id'] = '0';
     }
     request.fields['idCategory'] = idCategory.toString();
     request.fields['imageUrl'] = imageUrl;
