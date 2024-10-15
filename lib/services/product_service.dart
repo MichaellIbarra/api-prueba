@@ -8,6 +8,7 @@ import 'package:myapp/services/config.dart';
 class ProductService {
   static const String _baseUrl = '$baseUrl/api/v1/admin/products';
   static const String _inactiveProduct = '$baseUrl/api/v1/admin/products/inactive';
+  static const String _deleteProductUrl = '$baseUrl/api/v1/admin/products/delete';
 
   static Future<void> saveProduct({
     int? id,
@@ -61,6 +62,14 @@ class ProductService {
       return data.map((json) => ProductModel.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load inactive products');
+    }
+  }
+
+  static Future<void> deleteProduct(int id) async {
+    final response = await http.delete(Uri.parse('$_deleteProductUrl/$id'));
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to delete product');
     }
   }
 }

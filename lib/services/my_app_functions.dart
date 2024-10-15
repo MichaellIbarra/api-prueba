@@ -127,4 +127,51 @@ class MyAppFunctions {
           );
         });
   }
+
+  static Future<bool> showConfirmationDialog({
+    required BuildContext context,
+    required String title,
+    required String subtitle,
+  }) async {
+    bool confirmed = false;
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          title: TitlesTextWidget(label: title),
+          content: SubtitleText(
+            label: subtitle,
+            fontWeight: FontWeight.w600,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                confirmed = false;
+                Navigator.pop(context);
+              },
+              child: const SubtitleText(
+                label: "Cancel",
+                color: Colors.green,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                confirmed = true;
+                Navigator.pop(context);
+              },
+              child: const SubtitleText(
+                label: "OK",
+                color: Colors.red,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+    return confirmed;
+  }
 }

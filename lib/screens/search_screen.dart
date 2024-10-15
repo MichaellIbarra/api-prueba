@@ -71,7 +71,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
 
   Widget _buildProductList(bool isActive) {
     List<ProductModel> filteredProductList = isActive ? productList : inactiveProductList;
-    List<ProductModel> productListSearch = isActive ? this.productListSearch : this.inactiveProductListSearch;
+    List<ProductModel> productListSearch = isActive ? this.productListSearch : inactiveProductListSearch;
 
     return isLoading
         ? const Center(child: CircularProgressIndicator())
@@ -127,6 +127,13 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                                 ),
                               );
                               // Refetch products after returning from edit screen
+                              if (isActive) {
+                                _fetchProducts();
+                              } else {
+                                _fetchInactiveProducts();
+                              }
+                            },
+                            onDelete: () {
                               if (isActive) {
                                 _fetchProducts();
                               } else {
