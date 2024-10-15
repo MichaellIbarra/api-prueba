@@ -41,7 +41,7 @@ class AssetsManager {
   static String cosmetics = "$categoriesImagesPath/cosmetics.png";
   static String shoes = "$categoriesImagesPath/shoes.png";
   static String pc = "$categoriesImagesPath/pc.png";
-
+ 
   static String menu = "$categoriesImagesPath/menu.png";
   static String viewMenu = "$categoriesImagesPath/restaurant-menu.png";
   

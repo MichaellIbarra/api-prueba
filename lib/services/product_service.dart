@@ -7,6 +7,7 @@ import 'package:myapp/services/config.dart';
 
 class ProductService {
   static const String _baseUrl = '$baseUrl/api/v1/admin/products';
+  static const String _inactiveProduct = '$baseUrl/api/v1/admin/products/inactive';
 
   static Future<void> saveProduct({
     int? id,
@@ -21,7 +22,7 @@ class ProductService {
     var request = http.MultipartRequest('POST', Uri.parse(_baseUrl));
     if (id != null) {
       request.fields['id'] = id.toString();
-    }else{
+    } else {
       request.fields['id'] = '0';
     }
     request.fields['idCategory'] = idCategory.toString();
@@ -49,6 +50,17 @@ class ProductService {
       return data.map((json) => ProductModel.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load products');
+    }
+  }
+
+  static Future<List<ProductModel>> fetchInactiveProducts() async {
+    final response = await http.get(Uri.parse(_inactiveProduct));
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      return data.map((json) => ProductModel.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load inactive products');
     }
   }
 }

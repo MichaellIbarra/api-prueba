@@ -14,17 +14,22 @@ class SearchScreen extends StatefulWidget {
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderStateMixin {
   late TextEditingController searchTextController;
   List<ProductModel> productList = [];
   List<ProductModel> productListSearch = [];
+  List<ProductModel> inactiveProductList = [];
+  List<ProductModel> inactiveProductListSearch = [];
   bool isLoading = true;
+  late TabController _tabController;
 
   @override
   void initState() {
     searchTextController = TextEditingController();
+    _tabController = TabController(length: 2, vsync: this);
     super.initState();
     _fetchProducts();
+    _fetchInactiveProducts();
   }
 
   Future<void> _fetchProducts() async {
@@ -42,114 +47,140 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
+  Future<void> _fetchInactiveProducts() async {
+    try {
+      List<ProductModel> products = await ProductService.fetchInactiveProducts();
+      setState(() {
+        inactiveProductList = products;
+        isLoading = false;
+      });
+    } catch (error) {
+      setState(() {
+        isLoading = false;
+      });
+      // Handle error
+    }
+  }
+
   @override
   void dispose() {
     searchTextController.dispose();
+    _tabController.dispose();
     super.dispose();
+  }
+
+  Widget _buildProductList(bool isActive) {
+    List<ProductModel> filteredProductList = isActive ? productList : inactiveProductList;
+    List<ProductModel> productListSearch = isActive ? this.productListSearch : this.inactiveProductListSearch;
+
+    return isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : filteredProductList.isEmpty
+            ? const Center(child: TitlesTextWidget(label: "No product found"))
+            : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 15.0),
+                    TextField(
+                      controller: searchTextController,
+                      decoration: InputDecoration(
+                        hintText: "Search",
+                        prefixIcon: const Icon(Icons.search),
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            FocusScope.of(context).unfocus();
+                            searchTextController.clear();
+                          },
+                          child: const Icon(Icons.clear, color: Colors.red),
+                        ),
+                      ),
+                      onSubmitted: (value) {
+                        setState(() {
+                          productListSearch = filteredProductList
+                              .where((product) => product.name.toLowerCase().contains(value.toLowerCase()))
+                              .toList();
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 15.0),
+                    if (searchTextController.text.isNotEmpty && productListSearch.isEmpty)
+                      const Center(child: TitlesTextWidget(label: "No products found")),
+                    Expanded(
+                      child: GridView.builder(
+                        itemCount: searchTextController.text.isNotEmpty ? productListSearch.length : filteredProductList.length,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 12,
+                          crossAxisSpacing: 12,
+                          childAspectRatio: 0.75,
+                        ),
+                        itemBuilder: (context, index) {
+                          final product = searchTextController.text.isNotEmpty ? productListSearch[index] : filteredProductList[index];
+                          return ProductWidget(
+                            product: product,
+                            onTap: () async {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditOrUploadProductScreen(productModel: product),
+                                ),
+                              );
+                              // Refetch products after returning from edit screen
+                              if (isActive) {
+                                _fetchProducts();
+                              } else {
+                                _fetchInactiveProducts();
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
   }
 
   @override
   Widget build(BuildContext context) {
-    String? passedCategory =
-        ModalRoute.of(context)!.settings.arguments as String?;
-    List<ProductModel> filteredProductList = passedCategory == null
-        ? productList
-        : productList
-            .where((product) => product.idCategory == int.parse(passedCategory))
-            .toList();
+    String? passedCategory = ModalRoute.of(context)!.settings.arguments as String?;
 
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: TitlesTextWidget(label: passedCategory ?? "Search products"),
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            title: TitlesTextWidget(label: passedCategory ?? "Search products"),
+            bottom: TabBar(
+              controller: _tabController,
+              tabs: const [
+                Tab(text: 'Activos'),
+                Tab(text: 'Inactivos'),
+              ],
+              onTap: (index) {
+                setState(() {
+                  isLoading = true;
+                });
+                if (index == 0) {
+                  _fetchProducts();
+                } else {
+                  _fetchInactiveProducts();
+                }
+              },
+            ),
+          ),
+          body: TabBarView(
+            controller: _tabController,
+            children: [
+              _buildProductList(true),
+              _buildProductList(false),
+            ],
+          ),
         ),
-        body: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : filteredProductList.isEmpty
-                ? const Center(
-                    child: TitlesTextWidget(label: "No product found"))
-                : Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        TextField(
-                          controller: searchTextController,
-                          decoration: InputDecoration(
-                            hintText: "Search",
-                            prefixIcon: const Icon(Icons.search),
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                FocusScope.of(context).unfocus();
-                                searchTextController.clear();
-                              },
-                              child: const Icon(
-                                Icons.clear,
-                                color: Colors.red,
-                              ),
-                            ),
-                          ),
-                          onSubmitted: (value) {
-                            setState(() {
-                              productListSearch = filteredProductList
-                                  .where((product) => product.name
-                                      .toLowerCase()
-                                      .contains(value.toLowerCase()))
-                                  .toList();
-                            });
-                          },
-                        ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        if (searchTextController.text.isNotEmpty &&
-                            productListSearch.isEmpty) ...[
-                          const Center(
-                            child: TitlesTextWidget(label: "No products found"),
-                          ),
-                        ],
-                        Expanded(
-                          child: GridView.builder(
-                            itemCount: searchTextController.text.isNotEmpty
-                                ? productListSearch.length
-                                : filteredProductList.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 12,
-                              crossAxisSpacing: 12,
-                              childAspectRatio: 0.75,
-                            ),
-                            itemBuilder: (context, index) {
-                              final product = searchTextController.text.isNotEmpty
-                                  ? productListSearch[index]
-                                  : filteredProductList[index];
-                               return ProductWidget(
-                                product: product,
-                                onTap: () async {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EditOrUploadProductScreen(
-                                        productModel: product,
-                                      ),
-                                    ),
-                                  );
-                                  // Refetch products after returning from edit screen
-                                  _fetchProducts();
-                                },
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
       ),
     );
   }
