@@ -99,7 +99,7 @@ class _SearchScreenState extends State<SearchScreen>
     return isLoading
         ? const Center(child: CircularProgressIndicator())
         : filteredProductList.isEmpty
-            ? const Center(child: TitlesTextWidget(label: "No product found"))
+            ? const Center(child: TitlesTextWidget(label: "Productos no encontrado"))
             : Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -108,7 +108,7 @@ class _SearchScreenState extends State<SearchScreen>
                     TextField(
                       controller: searchTextController,
                       decoration: InputDecoration(
-                        hintText: "Search",
+                        hintText: "Buscar",
                         prefixIcon: const Icon(Icons.search),
                         suffixIcon: GestureDetector(
                           onTap: () {
@@ -193,7 +193,7 @@ class _SearchScreenState extends State<SearchScreen>
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: TitlesTextWidget(label: passedCategory ?? "Search products"),
+            title: TitlesTextWidget(label: passedCategory ?? "Productos"),
             bottom: TabBar(
               controller: _tabController,
               tabs: const [

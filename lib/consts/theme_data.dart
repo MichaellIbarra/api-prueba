@@ -59,8 +59,12 @@ class Styles {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
           foregroundColor: WidgetStateProperty.all<Color>(
-            isDarkTheme ? Colors.white : Colors.black,
+            isDarkTheme ? Colors.white : Colors.white,
           ),
+          backgroundColor: WidgetStateProperty.all<Color>(
+            isDarkTheme ?  const Color(0xFF9ACA43):const Color(0xFF9ACA43),
+          ),
+
         ),
       ),
     );

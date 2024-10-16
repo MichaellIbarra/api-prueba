@@ -208,7 +208,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                   ),
                   icon: const Icon(Icons.add_task),
                   label: Text(
-                    isEditing ? "Edit Product" : "Upload Product",
+                    isEditing ? "Editar Producto" : "Nuevo Producto",
                   ),
                   onPressed: () {
                     if (isEditing) {
@@ -225,7 +225,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
         appBar: AppBar(
           centerTitle: true,
           title: TitlesTextWidget(
-            label: isEditing ? "Edit Product" : "Upload a new product",
+            label: isEditing ? "Editar Producto" : "Nuevo Producto",
           ),
         ),
         body: SafeArea(
@@ -304,7 +304,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                         ],
                       ),
                     ],
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
                         Flexible(
@@ -370,7 +370,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 10),
                     TextFormField(
                       controller: _descriptionController,
                       minLines: 5,
@@ -378,7 +378,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
                       maxLength: 1000,
                       textCapitalization: TextCapitalization.sentences,
                       decoration: const InputDecoration(
-                        hintText: 'Product description',
+                        hintText: 'Una descripción',
                       ),
                       validator: (value) {
                         return MyValidators.uploadProdTexts(

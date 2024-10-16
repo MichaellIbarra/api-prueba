@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/providers/theme_provider.dart';
+import 'package:myapp/root_screen.dart';
 import 'package:myapp/screens/admin/dashboard_screen.dart';
 import 'package:myapp/services/assets_manager.dart';
 import 'package:myapp/widgets/title_text.dart';
@@ -21,12 +22,17 @@ class HomeScreen extends StatelessWidget {
             const TitlesTextWidget(label: "Bienvenidos al Restaurante"),
             const SizedBox(height: 30.0),
             ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 80, vertical: 12),
-                ),
-                onPressed: () {},
-                child: const Text("Login")),
+  style: ElevatedButton.styleFrom(
+    padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 12),
+  ),
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const RootScreen()),
+    );
+  },
+  child: const Text("Login"),
+),
             const SizedBox(height: 30.0),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
