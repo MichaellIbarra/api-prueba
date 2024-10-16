@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:myapp/screens/admin/product/search_screen.dart';
+import 'package:myapp/screens/admin/user/usersList_screen.dart';
 import 'package:myapp/services/assets_manager.dart';
 
 
@@ -27,7 +28,7 @@ class DashboardButtonsModel {
           text: "Usuarios",
           imagePath: AssetsManager.person,
           onPressed: () {
-            // Navigator.pushNamed(context, SearchScreen.routeName);
+            Navigator.pushNamed(context, UserslistScreen.routeName);
           },
         ),
       ];

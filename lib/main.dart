@@ -6,6 +6,8 @@ import 'package:myapp/screens/admin/dashboard_screen.dart';
 import 'package:myapp/home_screen.dart';
 import 'package:myapp/screens/admin/product/edit_upload_product_form.dart';
 import 'package:myapp/screens/admin/product/search_screen.dart';
+import 'package:myapp/screens/admin/user/registerPage_screen.dart';
+import 'package:myapp/screens/admin/user/usersList_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -35,6 +37,8 @@ class MyApp extends StatelessWidget {
               SearchScreen.routeName: (context) => const SearchScreen(),
               EditOrUploadProductScreen.routeName: (context) => const EditOrUploadProductScreen(),
               DashboardScreen.routeName: (context) => const DashboardScreen(), // Define la ruta aquí
+              UserslistScreen.routeName: (context) => const UserslistScreen(),
+            'registrar_usuario': (_) => const RegisterPage(),
             },
           );
         }
