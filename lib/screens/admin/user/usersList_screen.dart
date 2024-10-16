@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:myapp/screens/admin/user/editarPage_screen.dart';
+import 'package:myapp/services/assets_manager.dart';
 
 class UserslistScreen extends StatefulWidget {
   static const routeName = '/UserslistScreen';
@@ -108,76 +109,78 @@ class _UserslistScreenState extends State<UserslistScreen>
                         itemCount: users.length,
                         itemBuilder: (context, index) {
                           final user = users[index];
-                          return Container(
-                            padding: const EdgeInsets.all(20.0),
-                            margin: const EdgeInsets.symmetric(vertical: 10.0),
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 182, 203, 180),
-                              borderRadius: BorderRadius.circular(15.0),
+                          return Card(
+                            elevation: 5,
+                            margin: const EdgeInsets.all(5),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
                             ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: 50.0,
-                                  height: 50.0,
-                                  child: Image.asset("assets/clientIcon.png"),
-                                ),
-                                const SizedBox(width: 15.0),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${user['first_name']} ${user['last_name']}',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                          'Documento: ${user['document_type']} ${user['document_number']}'),
-                                      Text('Email: ${user['email']}'),
-                                      Text('Teléfono: ${user['phone']}'),
-                                      Text('Dirección: ${user['address']}'),
-                                    ],
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    child: Image.asset(AssetsManager.shoppingCart),
                                   ),
-                                ),
-                                Column(
-                                  children: [
-                                    if (isActive)
-                                      IconButton(
-                                        icon: const Icon(Icons.edit),
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  EditUserPage(
-                                                userId:
-                                                    user['id_user'].toString(),
-                                                userData: user,
+                                  const SizedBox(width: 15.0),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${user['first_name']} ${user['last_name']}',
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                            'Documento: ${user['document_type']} ${user['document_number']}'),
+                                        Text('Email: ${user['email']}'),
+                                        Text('Teléfono: ${user['phone']}'),
+                                        Text('Dirección: ${user['address']}'),
+                                      ],
+                                    ),
+                                  ),
+                                  Column(
+                                    children: [
+                                      if (isActive)
+                                        IconButton(
+                                          icon: const Icon(Icons.edit),
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditUserPage(
+                                                  userId: user['id_user']
+                                                      .toString(),
+                                                  userData: user,
+                                                ),
                                               ),
-                                            ),
-                                          ).then((value) {
-                                            if (value == true) {
-                                              fetchUsers();
-                                            }
-                                          });
+                                            ).then((value) {
+                                              if (value == true) {
+                                                fetchUsers();
+                                              }
+                                            });
+                                          },
+                                        ),
+                                      IconButton(
+                                        icon: Icon(isActive
+                                            ? Icons.delete
+                                            : Icons.restore),
+                                        onPressed: () {
+                                          eliminarPersona(
+                                              user['id_user'].toString(),
+                                              isActive);
                                         },
                                       ),
-                                    IconButton(
-                                      icon: Icon(isActive
-                                          ? Icons.delete
-                                          : Icons.restore),
-                                      onPressed: () {
-                                        eliminarPersona(
-                                            user['id_user'].toString(),
-                                            isActive);
-                                      },
-                                    ),
-                                  ],
-                                )
-                              ],
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                           );
                         },
