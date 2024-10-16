@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/screens/user/cart/cart_screen.dart';
-import 'package:myapp/screens/admin/dashboard_screen.dart';
 import 'package:myapp/screens/user/home_screen.dart';
 import 'package:myapp/screens/user/profile_screen.dart';
 import 'package:myapp/screens/admin/product/search_screen.dart';
@@ -23,7 +22,6 @@ class _RootScreenState extends State<RootScreen> {
   void initState() {
     super.initState();
     screens = const [
-      DashboardScreen(),
       HomeScreen(),
       SearchScreen(),
       CartScreen(),
