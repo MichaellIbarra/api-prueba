@@ -40,6 +40,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
       List<ProductModel> products = await ProductService.fetchProducts();
       setState(() {
         productList = products;
+        productListSearch = products; // Initialize search list
         isLoading = false;
       });
     } catch (error) {
@@ -55,6 +56,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
       List<ProductModel> products = await ProductService.fetchInactiveProducts();
       setState(() {
         inactiveProductList = products;
+        inactiveProductListSearch = products; // Initialize search list
         isLoading = false;
       });
     } catch (error) {
@@ -70,6 +72,21 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
     searchTextController.dispose();
     _tabController.dispose();
     super.dispose();
+  }
+
+  void _searchProducts(String query, bool isActive) {
+    List<ProductModel> filteredList = isActive ? productList : inactiveProductList;
+    List<ProductModel> searchList = filteredList
+        .where((product) => product.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    setState(() {
+      if (isActive) {
+        productListSearch = searchList;
+      } else {
+        inactiveProductListSearch = searchList;
+      }
+    });
   }
 
   Widget _buildProductList(bool isActive) {
@@ -109,16 +126,13 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                                 onTap: () {
                                   FocusScope.of(context).unfocus();
                                   searchTextController.clear();
+                                  _searchProducts('', isActive); // Clear search results
                                 },
                                 child: const Icon(Icons.clear, color: Colors.red),
                               ),
                             ),
-                            onSubmitted: (value) {
-                              setState(() {
-                                productListSearch = filteredProductList
-                                    .where((product) => product.name.toLowerCase().contains(value.toLowerCase()))
-                                    .toList();
-                              });
+                            onChanged: (value) {
+                              _searchProducts(value, isActive);
                             },
                           ),
                         ),
