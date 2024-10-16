@@ -8,10 +8,13 @@ class CategoryService {
   static const String _baseUrl = '$baseUrl/api/v1/admin/categories';
 
   static Future<List<CategoriesModel>> fetchCategories() async {
-    final response = await http.get(Uri.parse(_baseUrl));
+    final response = await http.get(
+      Uri.parse(_baseUrl),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+    );
 
     if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
+      List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
       return data.map((json) => CategoriesModel.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load categories');

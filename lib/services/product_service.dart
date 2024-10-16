@@ -41,6 +41,9 @@ class ProductService {
       request.files.add(await http.MultipartFile.fromPath('image', image.path));
     }
 
+    // Añadir encabezado para UTF-8
+    request.headers['Content-Type'] = 'application/json; charset=UTF-8';
+
     var response = await request.send();
     if (response.statusCode != 200) {
       throw Exception('Failed to save product');
@@ -48,10 +51,13 @@ class ProductService {
   }
 
   static Future<List<ProductModel>> fetchProducts() async {
-    final response = await http.get(Uri.parse(_baseUrl));
+    final response = await http.get(
+      Uri.parse(_baseUrl),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+    );
 
     if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
+      List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
       return data.map((json) => ProductModel.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load products');
@@ -59,10 +65,13 @@ class ProductService {
   }
 
   static Future<List<ProductModel>> fetchInactiveProducts() async {
-    final response = await http.get(Uri.parse(_inactiveProduct));
+    final response = await http.get(
+      Uri.parse(_inactiveProduct),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+    );
 
     if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
+      List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
       return data.map((json) => ProductModel.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load inactive products');
@@ -70,16 +79,21 @@ class ProductService {
   }
 
   static Future<void> deleteProduct(int id) async {
-    final response = await http.delete(Uri.parse('$_deleteProductUrl/$id'));
+    final response = await http.delete(
+      Uri.parse('$_deleteProductUrl/$id'),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+    );
 
     if (response.statusCode != 200) {
       throw Exception('Failed to delete product');
     }
   }
 
-
   static Future<void> restoreProduct(int id) async {
-    final response = await http.put(Uri.parse('$_restoreProductUrl/$id'));
+    final response = await http.put(
+      Uri.parse('$_restoreProductUrl/$id'),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+    );
 
     if (response.statusCode != 200) {
       throw Exception('Failed to restore product');

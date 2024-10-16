@@ -43,7 +43,7 @@ class ProductWidget extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 10),
               Text(
                 product.name,
                 style: const TextStyle(
