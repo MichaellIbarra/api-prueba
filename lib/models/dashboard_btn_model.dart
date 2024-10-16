@@ -25,7 +25,7 @@ class DashboardButtonsModel {
         ),
         DashboardButtonsModel(
           text: "Usuarios",
-          imagePath: AssetsManager.shoppingCart,
+          imagePath: AssetsManager.person,
           onPressed: () {
             // Navigator.pushNamed(context, SearchScreen.routeName);
           },
