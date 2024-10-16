@@ -46,7 +46,7 @@ class ProductWidget extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-             Wrap(
+              Wrap(
                 alignment: WrapAlignment.spaceBetween,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
@@ -59,28 +59,51 @@ class ProductWidget extends StatelessWidget {
                       color: Colors.blue,
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red, size: 24),
-                    onPressed: () async {
-                      bool confirm = await MyAppFunctions.showConfirmationDialog(
-                        context: context,
-                        title: "Delete Product",
-                        subtitle: "Are you sure you want to delete this product?",
-                      );
-                      if (confirm) {
-                        try {
-                          await ProductService.deleteProduct(product.id);
-                          onDelete();
-                        } catch (error) {
-                          MyAppFunctions.showErrorOrWarningDialog(
-                            context: context,
-                            subtitle: "Failed to delete product",
-                            fct: () {},
-                          );
-                        }
-                      }
-                    },
-                  ),
+                  product.status == 'A'
+                      ? IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red, size: 24),
+                          onPressed: () async {
+                            bool confirm = await MyAppFunctions.showConfirmationDialog(
+                              context: context,
+                              title: "Delete Product",
+                              subtitle: "Are you sure you want to delete this product?",
+                            );
+                            if (confirm) {
+                              try {
+                                await ProductService.deleteProduct(product.id);
+                                onDelete();
+                              } catch (error) {
+                                MyAppFunctions.showErrorOrWarningDialog(
+                                  context: context,
+                                  subtitle: "Failed to delete product",
+                                  fct: () {},
+                                );
+                              }
+                            }
+                          },
+                        )
+                      : IconButton(
+                          icon: const Icon(Icons.restore, color: Colors.blue, size: 24),
+                          onPressed: () async {
+                            bool confirm = await MyAppFunctions.showRestoreConfirmationDialog(
+                              context: context,
+                              title: "Restore Product",
+                              subtitle: "Are you sure you want to restore this product?",
+                            );
+                            if (confirm) {
+                              try {
+                                await ProductService.restoreProduct(product.id);
+                                onDelete();
+                              } catch (error) {
+                                MyAppFunctions.showErrorOrWarningDialog(
+                                  context: context,
+                                  subtitle: "Failed to restore product",
+                                  fct: () {},
+                                );
+                              }
+                            }
+                          },
+                        ),
                 ],
               ),
               Text(
@@ -88,7 +111,6 @@ class ProductWidget extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              
             ],
           ),
         ),

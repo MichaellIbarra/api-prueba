@@ -7,8 +7,12 @@ import 'package:myapp/services/config.dart';
 
 class ProductService {
   static const String _baseUrl = '$baseUrl/api/v1/admin/products';
-  static const String _inactiveProduct = '$baseUrl/api/v1/admin/products/inactive';
-  static const String _deleteProductUrl = '$baseUrl/api/v1/admin/products/delete';
+  static const String _inactiveProduct =
+      '$baseUrl/api/v1/admin/products/inactive';
+  static const String _deleteProductUrl =
+      '$baseUrl/api/v1/admin/products/delete';
+  static const String _restoreProductUrl =
+      '$baseUrl/api/v1/admin/products/restore';
 
   static Future<void> saveProduct({
     int? id,
@@ -70,6 +74,15 @@ class ProductService {
 
     if (response.statusCode != 200) {
       throw Exception('Failed to delete product');
+    }
+  }
+
+
+  static Future<void> restoreProduct(int id) async {
+    final response = await http.put(Uri.parse('$_restoreProductUrl/$id'));
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to restore product');
     }
   }
 }
