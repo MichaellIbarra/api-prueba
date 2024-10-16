@@ -1,12 +1,9 @@
 // search_screen.dart
 import 'package:flutter/material.dart';
-import 'package:myapp/services/assets_manager.dart';
 import '../models/product_model.dart';
 import '../services/product_service.dart';
 import '../widgets/product_widget.dart';
 import '../widgets/title_text.dart';
-import '../widgets/subtitle_text.dart';
-import '../services/my_app_functions.dart';
 import 'edit_upload_product_form.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -102,41 +99,23 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                 child: Column(
                   children: [
                     const SizedBox(height: 15.0),
-                    Row(
-                      children: [
-                        ElevatedButton.icon(
-                          icon: Image.asset(
-                            AssetsManager.menu,
-                            height: 24,
-                            width: 24,
-                          ),
-                          label: const Text("Agregar Producto"),
-                          onPressed: () {
-                            Navigator.pushNamed(context, EditOrUploadProductScreen.routeName);
+                    TextField(
+                      controller: searchTextController,
+                      decoration: InputDecoration(
+                        hintText: "Search",
+                        prefixIcon: const Icon(Icons.search),
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            FocusScope.of(context).unfocus();
+                            searchTextController.clear();
+                            _searchProducts('', isActive); // Clear search results
                           },
+                          child: const Icon(Icons.clear, color: Colors.red),
                         ),
-                        const SizedBox(width: 15.0),
-                        Expanded(
-                          child: TextField(
-                            controller: searchTextController,
-                            decoration: InputDecoration(
-                              hintText: "Search",
-                              prefixIcon: const Icon(Icons.search),
-                              suffixIcon: GestureDetector(
-                                onTap: () {
-                                  FocusScope.of(context).unfocus();
-                                  searchTextController.clear();
-                                  _searchProducts('', isActive); // Clear search results
-                                },
-                                child: const Icon(Icons.clear, color: Colors.red),
-                              ),
-                            ),
-                            onChanged: (value) {
-                              _searchProducts(value, isActive);
-                            },
-                          ),
-                        ),
-                      ],
+                      ),
+                      onChanged: (value) {
+                        _searchProducts(value, isActive);
+                      },
                     ),
                     const SizedBox(height: 15.0),
                     if (searchTextController.text.isNotEmpty && productListSearch.isEmpty)
@@ -222,6 +201,15 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
               _buildProductList(true),
               _buildProductList(false),
             ],
+          ),
+          floatingActionButton: Visibility(
+            visible: _tabController.index == 0,
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, EditOrUploadProductScreen.routeName);
+              },
+              child: const Icon(Icons.add),
+            ),
           ),
         ),
       ),

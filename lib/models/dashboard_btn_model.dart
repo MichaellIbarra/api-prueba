@@ -1,7 +1,6 @@
 // import 'package:myapp/screens/inner_screen/orders/orders_screen.dart';
 
 import 'package:flutter/material.dart';
-import 'package:myapp/screens/edit_upload_product_form.dart';
 import 'package:myapp/screens/search_screen.dart';
 
 import '../services/assets_manager.dart';
@@ -18,15 +17,8 @@ class DashboardButtonsModel {
 
   static List<DashboardButtonsModel> dashboardBtnList(context) => [
         DashboardButtonsModel(
-          text: "Agregar Producto",
+          text: "Productos",
           imagePath: AssetsManager.menu,
-          onPressed: () {
-            Navigator.pushNamed(context, EditOrUploadProductScreen.routeName);
-          },
-        ),
-        DashboardButtonsModel(
-          text: "Ver Productos",
-          imagePath: AssetsManager.viewMenu,
           onPressed: () {
             Navigator.pushNamed(context, SearchScreen.routeName);
           },

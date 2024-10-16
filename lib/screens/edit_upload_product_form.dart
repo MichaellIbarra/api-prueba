@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:myapp/models/product_model.dart';
 import 'package:myapp/models/categories_model.dart';
-import 'package:myapp/screens/search_screen.dart';
 import 'package:myapp/services/my_app_functions.dart';
 import 'package:myapp/services/product_service.dart';
 import 'package:myapp/services/category_service.dart'; // Import the category service
@@ -107,7 +106,7 @@ class _EditOrUploadProductScreenState extends State<EditOrUploadProductScreen> {
         image: _pickedImage,
       );
       clearForm(); // Clear the form after saving the product
-      Navigator.pushReplacementNamed(context, SearchScreen.routeName); // Navigate to SearchScreen
+     Navigator.pop(context); 
     } catch (error) {
       // Handle error
       MyAppFunctions.showErrorOrWarningDialog(
