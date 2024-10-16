@@ -119,6 +119,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                           final product = searchTextController.text.isNotEmpty ? productListSearch[index] : filteredProductList[index];
                           return ProductWidget(
                             product: product,
+                            isActive: isActive,
                             onTap: () async {
                               await Navigator.push(
                                 context,

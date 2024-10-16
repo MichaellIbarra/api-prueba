@@ -9,13 +9,20 @@ class ProductWidget extends StatelessWidget {
   final ProductModel product;
   final VoidCallback onTap;
   final VoidCallback onDelete;
+  final bool isActive;
 
-  const ProductWidget({super.key, required this.product, required this.onTap, required this.onDelete});
+  const ProductWidget({
+    super.key,
+    required this.product,
+    required this.onTap,
+    required this.onDelete,
+    required this.isActive,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: isActive ? onTap : null,
       child: Card(
         elevation: 5,
         margin: const EdgeInsets.all(5),
