@@ -1,18 +1,17 @@
-// edit_upload_product_form.dart
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:myapp/consts/validator.dart';
 import 'package:myapp/models/product_model.dart';
 import 'package:myapp/models/categories_model.dart';
 import 'package:myapp/services/my_app_functions.dart';
 import 'package:myapp/services/product_service.dart';
-import 'package:myapp/services/category_service.dart'; // Import the category service
+import 'package:myapp/services/category_service.dart';
+import 'package:myapp/widgets/subtitle_text.dart';
+import 'package:myapp/widgets/title_text.dart'; 
 
-import '../consts/validator.dart';
-import '../widgets/subtitle_text.dart';
-import '../widgets/title_text.dart';
 
 class EditOrUploadProductScreen extends StatefulWidget {
   static const routeName = '/EditOrUploadProductScreen';

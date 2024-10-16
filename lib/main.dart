@@ -1,9 +1,11 @@
+// main.dart
 import 'package:flutter/material.dart';
 import 'package:myapp/consts/theme_data.dart';
 import 'package:myapp/providers/theme_provider.dart';
-import 'package:myapp/root_screen.dart';
-import 'package:myapp/screens/edit_upload_product_form.dart';
-import 'package:myapp/screens/search_screen.dart';
+import 'package:myapp/screens/admin/dashboard_screen.dart';
+import 'package:myapp/home_screen.dart';
+import 'package:myapp/screens/admin/product/edit_upload_product_form.dart';
+import 'package:myapp/screens/admin/product/search_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -28,11 +30,11 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'La Chancha',
             theme: Styles.themeData(isDarkTheme: themeProvider.getIsDarkTheme, context: context),
-            home: const RootScreen(),
-              routes: {
-              SearchScreen.routeName: (context) => const SearchScreen(), // Define la ruta aquí
-                EditOrUploadProductScreen.routeName: (context) =>
-                const EditOrUploadProductScreen(),
+            home: const HomeScreen(),
+            routes: {
+              SearchScreen.routeName: (context) => const SearchScreen(),
+              EditOrUploadProductScreen.routeName: (context) => const EditOrUploadProductScreen(),
+              DashboardScreen.routeName: (context) => const DashboardScreen(), // Define la ruta aquí
             },
           );
         }

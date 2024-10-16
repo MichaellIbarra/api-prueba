@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/screens/cart/bottom_checkout.dart';
-import 'package:myapp/screens/cart/cart_widget.dart';
+import 'package:myapp/screens/user/cart/bottom_checkout.dart';
+import 'package:myapp/screens/user/cart/cart_widget.dart';
 import 'package:myapp/services/assets_manager.dart';
 import 'package:myapp/widgets/empty_bag.dart';
 import 'package:myapp/widgets/title_text.dart';

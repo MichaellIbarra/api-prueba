@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/screens/cart/cart_screen.dart';
-import 'package:myapp/screens/dashboard_screen.dart';
-import 'package:myapp/screens/home_screen.dart';
-import 'package:myapp/screens/profile_screen.dart';
-import 'package:myapp/screens/search_screen.dart';
+import 'package:myapp/screens/user/cart/cart_screen.dart';
+import 'package:myapp/screens/admin/dashboard_screen.dart';
+import 'package:myapp/screens/user/home_screen.dart';
+import 'package:myapp/screens/user/profile_screen.dart';
+import 'package:myapp/screens/admin/product/search_screen.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 
 class RootScreen extends StatefulWidget {

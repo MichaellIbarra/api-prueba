@@ -1,9 +1,9 @@
 // search_screen.dart
 import 'package:flutter/material.dart';
-import '../models/product_model.dart';
-import '../services/product_service.dart';
-import '../widgets/product_widget.dart';
-import '../widgets/title_text.dart';
+import 'package:myapp/models/product_model.dart';
+import 'package:myapp/services/product_service.dart';
+import 'package:myapp/widgets/product_widget.dart';
+import 'package:myapp/widgets/title_text.dart';
 import 'edit_upload_product_form.dart';
 
 class SearchScreen extends StatefulWidget {
