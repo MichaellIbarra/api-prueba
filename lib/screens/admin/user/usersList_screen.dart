@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:myapp/screens/admin/user/editarPage_screen.dart';
 import 'package:myapp/services/assets_manager.dart';
+import 'package:myapp/services/config.dart';
 import 'package:myapp/widgets/title_text.dart';
 
 class UserslistScreen extends StatefulWidget {
@@ -12,7 +13,7 @@ class UserslistScreen extends StatefulWidget {
 
   @override
   State<UserslistScreen> createState() => _UserslistScreenState();
-}
+} 
 
 class _UserslistScreenState extends State<UserslistScreen>
     with SingleTickerProviderStateMixin {
@@ -34,7 +35,7 @@ class _UserslistScreenState extends State<UserslistScreen>
   Future<void> fetchUsers() async {
     final status = isActive ? "activos" : "inactivos";
     final response = await http.get(Uri.parse(
-        "https://psychic-capybara-4xvq5g9x97j377v5-8085.app.github.dev/api/v1/users/$status"));
+        "$baseUrl/api/v1/users/$status"));
 
     if (response.statusCode == 200) {
       setState(() {
@@ -132,7 +133,8 @@ class _UserslistScreenState extends State<UserslistScreen>
                                     SizedBox(
                                       width: 50.0,
                                       height: 50.0,
-                                      child: Image.asset(AssetsManager.shoppingCart),
+                                      child: Image.asset(
+                                          AssetsManager.shoppingCart),
                                     ),
                                     const SizedBox(width: 15.0),
                                     Expanded(
@@ -284,9 +286,6 @@ class _UserslistScreenState extends State<UserslistScreen>
 
     if (confirmAction == true) {
       try {
-        final response = await http.put(Uri.parse(
-            'https://psychic-capybara-4vq5g9x97j377v5-8085.app.github.dev/api/v1/users/$id/${estado ? 'inactivar' : 'restaurar'}'));
-
         setState(() {
           users.removeWhere((user) => user['id_user'].toString() == id);
         });
@@ -301,6 +300,7 @@ class _UserslistScreenState extends State<UserslistScreen>
   }
 
   void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:myapp/services/config.dart';
+
 class RegisterPage extends StatefulWidget {
   static const routeName = '/registrar_usuario';
 
@@ -32,20 +34,19 @@ class _RegisterPageState extends State<RegisterPage> {
 
       final response = await http.post(
         Uri.parse(
-            'https://psychic-capybara-4xvq5g9x97j377v5-8085.app.github.dev/api/v1/users/register'), // Cambia la URL según tu API
+            '$baseUrl/api/v1/users/register'), // Cambia la URL según tu API
         headers: {"Content-Type": "application/json"},
         body: json.encode(_formData),
       );
 
       if (response.statusCode == 201) {
         _showSnackBar("Registro exitoso");
-        Navigator.pop(
-            context); // Cierra la ventana después del registro exitoso
+        Navigator.pop(context, true); // Return true to indicate success
       } else {
         _showSnackBar("Error al registrar: ${response.body}");
       }
     }
-  }
+  } 
 
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context)

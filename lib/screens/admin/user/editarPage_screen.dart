@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:myapp/services/config.dart';
+
 class EditUserPage extends StatefulWidget {
   final String userId;
   final Map<String, dynamic> userData;
@@ -47,7 +49,7 @@ class _EditUserPageState extends State<EditUserPage> {
   Future<void> updateUser() async {
     final response = await http.put(
       Uri.parse(
-          'https://psychic-capybara-4xvq5g9x97j377v5-8085.app.github.dev/api/v1/users/update/${widget.userId}'),
+          '$baseUrl/api/v1/users/update/${widget.userId}'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'username': username,
@@ -62,7 +64,7 @@ class _EditUserPageState extends State<EditUserPage> {
         'user_type': userType,
       }),
     );
-
+ 
     if (response.statusCode == 200) {
       Navigator.pop(context, true); // Regresa a la pantalla anterior
     } else {
@@ -216,7 +218,8 @@ class _EditUserPageState extends State<EditUserPage> {
               ),
               DropdownButtonFormField<String>(
                 value: documentType,
-                decoration: const InputDecoration(labelText: 'Tipo de Documento'),
+                decoration:
+                    const InputDecoration(labelText: 'Tipo de Documento'),
                 items: documentTypes.map((String type) {
                   return DropdownMenuItem<String>(
                     value: type,
